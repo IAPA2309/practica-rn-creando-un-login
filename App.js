@@ -1,65 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
-// import { TextInput } from 'react-native-web';
-import axios from 'axios';
+import React from "react";
+import LogIn from "./source/pages/LogIn";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Register from "./source/pages/Register";
 
 export default function App() {
-  const [user, onChangeUser] = React.useState("user");
-  const [password, onChangePassword] = React.useState("password");
-
-  function loginUser() {
-    axios
-      .post(
-        "http://localhost:5000/login",
-        {
-          username: user,
-          password: password,
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*"
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-  }
+  const Stack = createNativeStackNavigator();
 
   return (
-    <SafeAreaView>
-      <TextInput
-        styles={styles.input}
-        onChangeText={onChangeUser}
-        value={user}
-        placeholder="usuario"
-      />
-      <TextInput
-        styles={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="contraseña"
-      />
-      <Button 
-      title="Iniciar Sesion"
-      onPress={loginUser}
-      />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="LogIn">
+        <Stack.Screen name="LogIn" component={LogIn} />
+        <Stack.Screen name="Register" component={Register} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 10,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-});
