@@ -1,17 +1,20 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  Button,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 
-export default function LogIn() {
+export default function LogIn({ navigation }) {
   const [user, onChangeUser] = React.useState("user");
   const [password, onChangePassword] = React.useState("password");
+
+  const [error, setError] = useState(false);
+  const [messageNotification, setMessageNotification] = useState('');
 
   function loginUser() {
     axios
@@ -20,22 +23,22 @@ export default function LogIn() {
         {
           username: user,
           password: password,
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
         }
       )
       .then(function (response) {
+        setError(false);
+        setMessageNotification('Inicio de sesion existoso.');
         console.log(response);
       })
       .catch(function (error) {
+        setError(true);
+        setMessageNotification('Hubo un error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
         console.log(error);
       })
       .then(function () {
         // always executed
       });
+    }
 
     return (
       <SafeAreaView style={styles.center}>
@@ -59,10 +62,17 @@ export default function LogIn() {
         >
           <Text style={styles.btnText}>Iniciar Sesion</Text>
         </TouchableOpacity>
-        <Text>¿No tenes una cuenta? Registrate</Text>
+        {error && <Text style={{ color: 'red', marginTop: 5 }}>{messageNotification}</Text>}
+        {!error && <Text style={{ color: 'green', marginTop: 5 }}>{messageNotification}</Text>}
+        <TouchableOpacity
+          title="No tengo cuenta"
+          onPress={() => navigation.navigate("Register")}
+          style={styles.button}
+        >
+          <Text style={styles.btnText}>No tengo cuenta</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
-  }
 }
 
 const styles = StyleSheet.create({
