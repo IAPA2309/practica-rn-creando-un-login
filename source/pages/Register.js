@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,8 +10,11 @@ import {
 import axios from "axios";
 
 function Register() {
-  const [user, onChangeUser] = React.useState("user");
-  const [password, onChangePassword] = React.useState("password");
+  const [user, onChangeUser] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+
+  const [error, setError] = useState(false);
+  const [messageNotification, setMessageNotification] = useState('');
 
   function registerUser() {
     axios
@@ -23,9 +26,13 @@ function Register() {
         }
       )
       .then(function (response) {
+        setError(false);
+        setMessageNotification(response.data.message);
         console.log(response);
       })
       .catch(function (error) {
+        setError(true);
+        setMessageNotification(error.response.data.error);
         console.log(error);
       })
       .then(function () {
@@ -55,6 +62,8 @@ function Register() {
         >
           <Text style={styles.btnText}>Registarse</Text>
         </TouchableOpacity>
+        {error && <Text style={{ color: 'red', marginTop: 5 }}>{messageNotification}</Text>}
+        {!error && <Text style={{ color: 'green', marginTop: 5 }}>{messageNotification}</Text>}
       </SafeAreaView>
     );
 }

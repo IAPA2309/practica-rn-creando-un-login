@@ -10,8 +10,8 @@ import {
 import axios from "axios";
 
 export default function LogIn({ navigation }) {
-  const [user, onChangeUser] = React.useState("user");
-  const [password, onChangePassword] = React.useState("password");
+  const [user, onChangeUser] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
 
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState('');
@@ -27,12 +27,12 @@ export default function LogIn({ navigation }) {
       )
       .then(function (response) {
         setError(false);
-        setMessageNotification('Inicio de sesion existoso.');
+        setMessageNotification(response.data.message);
         console.log(response);
       })
       .catch(function (error) {
         setError(true);
-        setMessageNotification('Hubo un error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
+        setMessageNotification(error.response.data.error);
         console.log(error);
       })
       .then(function () {
