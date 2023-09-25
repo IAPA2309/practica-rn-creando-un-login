@@ -29,6 +29,7 @@ export default function LogIn({ navigation }) {
         setError(false);
         setMessageNotification(response.data.message);
         console.log(response);
+        navigation.navigate("Home", { username: user });
       })
       .catch(function (error) {
         setError(true);

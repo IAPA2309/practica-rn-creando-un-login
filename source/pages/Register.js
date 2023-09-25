@@ -9,26 +9,24 @@ import {
 } from "react-native";
 import axios from "axios";
 
-function Register() {
+function Register({ navigation }) {
   const [user, onChangeUser] = React.useState("");
   const [password, onChangePassword] = React.useState("");
 
   const [error, setError] = useState(false);
-  const [messageNotification, setMessageNotification] = useState('');
+  const [messageNotification, setMessageNotification] = useState("");
 
   function registerUser() {
     axios
-      .post(
-        "http://localhost:5000/register",
-        {
-          username: user,
-          password: password,
-        }
-      )
+      .post("http://localhost:5000/register", {
+        username: user,
+        password: password,
+      })
       .then(function (response) {
         setError(false);
         setMessageNotification(response.data.message);
         console.log(response);
+        navigation.navigate("Home", { username: user });
       })
       .catch(function (error) {
         setError(true);
@@ -38,34 +36,42 @@ function Register() {
       .then(function () {
         // always executed
       });
-    }
+  }
 
-    return (
-      <SafeAreaView style={styles.center}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeUser}
-          // value={user}
-          placeholder="Usuario"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          // value={password}
-          placeholder="Contraseña"
-          secureTextEntry={true}
-        />
-        <TouchableOpacity
-          title="Iniciar Sesion"
-          onPress={registerUser}
-          style={styles.button}
-        >
-          <Text style={styles.btnText}>Registarse</Text>
-        </TouchableOpacity>
-        {error && <Text style={{ color: 'red', marginTop: 5 }}>{messageNotification}</Text>}
-        {!error && <Text style={{ color: 'green', marginTop: 5 }}>{messageNotification}</Text>}
-      </SafeAreaView>
-    );
+  return (
+    <SafeAreaView style={styles.center}>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeUser}
+        // value={user}
+        placeholder="Usuario"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangePassword}
+        // value={password}
+        placeholder="Contraseña"
+        secureTextEntry={true}
+      />
+      <TouchableOpacity
+        title="Iniciar Sesion"
+        onPress={registerUser}
+        style={styles.button}
+      >
+        <Text style={styles.btnText}>Registarse</Text>
+      </TouchableOpacity>
+      {error && (
+        <Text style={{ color: "red", marginTop: 5 }}>
+          {messageNotification}
+        </Text>
+      )}
+      {!error && (
+        <Text style={{ color: "green", marginTop: 5 }}>
+          {messageNotification}
+        </Text>
+      )}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
