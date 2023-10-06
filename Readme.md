@@ -79,6 +79,7 @@ Una aplicacion de React Native que simula un login, en el cual se puede iniciar 
 ### Hecho con
 
 * [![React][React.js]][React-url]
+* Expo
 
 <p align="right">(<a href="#readme-top">Volver arriba</a>)</p>
 
@@ -122,7 +123,7 @@ Instalar la ultima version de NPM.
     ```
     expo start --tunnel
     ```
-2. Una vez que corra pulsar la W para iniciarlo en el navegador, en su defecto utilizar la aplicacion EXPO GO y escanear el QR para correlo en el celular.
+2. Una vez que corra pulsar la W en la consola para iniciarlo en el navegador, en su defecto utilizar la aplicacion [EXPO](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=es_AR&gl=US) y escanear el QR para correlo en el celular.
 
     
 
@@ -131,9 +132,11 @@ Instalar la ultima version de NPM.
 <!-- USAGE EXAMPLES -->
 ## Uso
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+<img src="img/FirstScreenImage.png" alt="Logo" width="750" height="400">
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+La aplicacion es simple, se encuentran campos de texto los cuales hay que completar para poder iniciar sesion, o en su defecto utilizar el boton de "No tengo cuenta" que te redirije a otra pantalla en la cual podas crear un usuario. 
+
+Si inicias sesion, te redirijira a una pantalla de bienvenida donde podras completar tu perfil con nombre y apellido.
 
 <p align="right">(<a href="#readme-top">Volver arriba</a>)</p>
 
