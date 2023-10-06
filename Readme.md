@@ -132,7 +132,7 @@ Instalar la ultima version de NPM.
 <!-- USAGE EXAMPLES -->
 ## Uso
 
-<img src="img/FirstScreenImage.png" alt="Logo" width="750" height="400">
+<img src="https://github.com/IAPA2309/practica-rn-creando-un-login/blob/Documentation/img/FirstScreenImage.PNG" alt="Logo" width="750" height="400">
 
 La aplicacion es simple, se encuentran campos de texto los cuales hay que completar para poder iniciar sesion, o en su defecto utilizar el boton de "No tengo cuenta" que te redirije a otra pantalla en la cual podas crear un usuario. 
 
