@@ -7,11 +7,8 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
-import axios from "axios";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
-
-
 
 function Register({ navigation }) {
   
@@ -21,7 +18,7 @@ function Register({ navigation }) {
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState("");
     
-    const handleRegister = async () => {
+  const handleRegister = async () => {
     try {
       const auth = getAuth();
       const { user } = await createUserWithEmailAndPassword(

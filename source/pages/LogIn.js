@@ -8,9 +8,11 @@ import {
   Button,
 } from "react-native";
 import axios from "axios";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 export default function LogIn({ navigation }) {
-  const [user, onChangeUser] = React.useState("");
+  const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
 
   const [error, setError] = useState(false);
@@ -21,7 +23,7 @@ export default function LogIn({ navigation }) {
       .post(
         "http://localhost:5000/login",
         {
-          username: user,
+          username: email,
           password: password,
         }
       )
@@ -29,7 +31,7 @@ export default function LogIn({ navigation }) {
         setError(false);
         setMessageNotification(response.data.message);
         console.log(response);
-        navigation.navigate("Home", { username: user });
+        navigation.navigate("Home", { username: email });
       })
       .catch(function (error) {
         setError(true);
@@ -40,12 +42,28 @@ export default function LogIn({ navigation }) {
         // always executed
       });
     }
+    
+    const handleLogin = async () => {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        navigation.navigate("Home", { username: user });
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+    };
+  
 
     return (
       <SafeAreaView style={styles.center}>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeUser}
+          onChangeText={onChangeEmail}
           // value={user}
           placeholder="Usuario"
         />
@@ -58,7 +76,7 @@ export default function LogIn({ navigation }) {
         />
         <TouchableOpacity
           title="Iniciar Sesion"
-          onPress={loginUser}
+          onPress={handleLogin}
           style={styles.button}
         >
           <Text style={styles.btnText}>Iniciar Sesion</Text>
