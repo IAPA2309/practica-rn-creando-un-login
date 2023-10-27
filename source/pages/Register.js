@@ -20,28 +20,6 @@ function Register({ navigation }) {
   
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState("");
-
-  function registerUser() {
-    axios
-      .post("http://localhost:5000/register", {
-        username: email,
-        password: password,
-      })
-      .then(function (response) {
-        setError(false);
-        setMessageNotification(response.data.message);
-        console.log(response);
-        navigation.navigate("Home", { username: email });
-      })
-      .catch(function (error) {
-        setError(true);
-        setMessageNotification(error.response.data.error);
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-    }
     
     const handleRegister = async () => {
     try {
