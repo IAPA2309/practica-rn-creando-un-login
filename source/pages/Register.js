@@ -8,25 +8,30 @@ import {
   Button,
 } from "react-native";
 import axios from "axios";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+
 
 function Register({ navigation }) {
-  const [user, onChangeUser] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
-
+  
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePassword] = useState("");
+  
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState("");
 
   function registerUser() {
     axios
       .post("http://localhost:5000/register", {
-        username: user,
+        username: email,
         password: password,
       })
       .then(function (response) {
         setError(false);
         setMessageNotification(response.data.message);
         console.log(response);
-        navigation.navigate("Home", { username: user });
+        navigation.navigate("Home", { username: email });
       })
       .catch(function (error) {
         setError(true);
@@ -36,15 +41,37 @@ function Register({ navigation }) {
       .then(function () {
         // always executed
       });
-  }
+    }
+    
+    const handleRegister = async () => {
+    try {
+      const auth = getAuth();
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+        );
+        const { uid } = user;
+      const db = getFirestore();
+      await setDoc(doc(db, "usuarios", uid), {
+        password,
+        email,
+        uid,
+      });
+      navigation.navigate("Home", { username: email });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.center}>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeUser}
+        onChangeText={onChangeEmail}
         // value={user}
-        placeholder="Usuario"
+        placeholder="Email"
       />
       <TextInput
         style={styles.input}
@@ -55,7 +82,7 @@ function Register({ navigation }) {
       />
       <TouchableOpacity
         title="Iniciar Sesion"
-        onPress={registerUser}
+        onPress={handleRegister}
         style={styles.button}
       >
         <Text style={styles.btnText}>Registarse</Text>
