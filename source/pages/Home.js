@@ -8,11 +8,12 @@ import {
 import React, { Component, useEffect, useState } from 'react'
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
-
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default function Home() {
     const route = useRoute();
-    const username = route.params?.username;
+    const uid = route.params?.uid;
 
     const [editMode, setEditMode] = useState(false);
     const [nombre, setNombre] = useState(null);
@@ -21,7 +22,10 @@ export default function Home() {
     const [editedNombre, setEditedNombre] = useState(nombre || "");
     const [editedApellido, setEditedApellido] = useState(apellido || "");
 
-    useEffect(() => getUserData());
+    useEffect(() => {
+        getUserData();
+      }
+    );
 
     const handleEditClick = () => {
       setEditMode(true);
@@ -31,34 +35,41 @@ export default function Home() {
       setEditMode(true); // para que el formulario de editar se pueda usar, mantener en true
     };
 
-    const handleSaveClick = () => {
-      axios
-        .put("http://localhost:5000/updateProfile", {
-          user: username,
+    const handleSaveClick = async () => {
+      try{
+        const db = getFirestore();
+        
+        const docRef = doc(db, "usuarios", uid);
+  
+        await updateDoc(docRef, {
           nombre: editedNombre,
-          apellido: editedApellido,
-        })
-        .then((response) => {
-          setEditMode(false);
-        })
-        .catch((error) => {
-          console.error(error);
+          apellido: editedApellido
         });
+
+        setEditMode(false);
+
+      }catch(error){
+        console.log(error);
+      }
     };
 
-    function getUserData() {
-      axios
-        .post("http://localhost:5000/userData", {
-          username: username,
-        })
-        .then(function (response) {
-            setNombre(response.data[0]?.nombre || null);
-            setApellido(response.data[0]?.apellido || null);
-            console.log(response.data[0]);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
+    async function getUserData() {
+
+      const db = getFirestore();
+
+      const docRef = doc(db, "usuarios", uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+
+        console.log("Document data:", docSnap.data());
+        setNombre(docSnap.data().nombre || null);
+        setApellido(docSnap.data().apellido || null);
+
+      } else {
+        console.log("No such document!");
+      }
+
     }
 
     return (

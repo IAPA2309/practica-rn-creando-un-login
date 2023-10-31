@@ -17,48 +17,23 @@ export default function LogIn({ navigation }) {
 
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState('');
-
-  function loginUser() {
-    axios
-      .post(
-        "http://localhost:5000/login",
-        {
-          username: email,
-          password: password,
-        }
-      )
-      .then(function (response) {
-        setError(false);
-        setMessageNotification(response.data.message);
-        console.log(response);
-        navigation.navigate("Home", { username: email });
-      })
-      .catch(function (error) {
-        setError(true);
-        setMessageNotification(error.response.data.error);
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-    }
     
     const handleLogin = async () => {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
         const user = userCredential.user;
-        navigation.navigate("Home", { username: user });
-        // ...
+        console.log(user);
+        navigation.navigate("Home", { uid: user.uid });
       })
       .catch((error) => {
+        setError(true);
         const errorCode = error.code;
         const errorMessage = error.message;
+        setMessageNotification(errorMessage);
       });
     };
   
-
     return (
       <SafeAreaView style={styles.center}>
         <TextInput

@@ -33,12 +33,15 @@ function Register({ navigation }) {
         email,
         uid,
       });
-      navigation.navigate("Home", { username: email });
+      navigation.navigate("Home", { uid: user.uid });
     } catch (error) {
       console.log(error);
+      setError(true);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setMessageNotification(errorMessage);
     }
   };
-
 
   return (
     <SafeAreaView style={styles.center}>
