@@ -39,15 +39,13 @@ export default function LogIn({ navigation }) {
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
-          // value={user}
           placeholder="Usuario"
-        />
+          />
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
-          // value={password}
-          placeholder="Contraseña"
           secureTextEntry={true}
+          placeholder="Contraseña"
         />
         <TouchableOpacity
           title="Iniciar Sesion"
@@ -71,16 +69,14 @@ export default function LogIn({ navigation }) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 10,
     borderWidth: 1,
-    padding: 20,
+    padding: 10,
     borderRadius: 3,
     width: 400,
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 0,
-    backgroundColor: "#f0ebf7",
-    placeholderTextColor: "#6e706e",
+    backgroundColor: "#f0ebf7"
   },
   button: {
     marginTop: 10,

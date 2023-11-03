@@ -124,16 +124,14 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   input: {
-    height: 10,
     borderWidth: 1,
-    padding: 20,
+    padding: 10,
     borderRadius: 3,
     width: 400,
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 0,
-    backgroundColor: "#f0ebf7",
-    placeholderTextColor: "#6e706e",
+    backgroundColor: "#f0ebf7"
   },
   button: {
     marginTop: 10,
