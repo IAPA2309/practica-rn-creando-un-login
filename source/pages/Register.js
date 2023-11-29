@@ -7,44 +7,49 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
-import axios from "axios";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 function Register({ navigation }) {
-  const [user, onChangeUser] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
-
+  
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePassword] = useState("");
+  
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState("");
-
-  function registerUser() {
-    axios
-      .post("http://localhost:5000/register", {
-        username: user,
-        password: password,
-      })
-      .then(function (response) {
-        setError(false);
-        setMessageNotification(response.data.message);
-        console.log(response);
-        navigation.navigate("Home", { username: user });
-      })
-      .catch(function (error) {
-        setError(true);
-        setMessageNotification(error.response.data.error);
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
+    
+  const handleRegister = async () => {
+    try {
+      const auth = getAuth();
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+        );
+        const { uid } = user;
+      const db = getFirestore();
+      await setDoc(doc(db, "usuarios", uid), {
+        password,
+        email,
+        uid,
       });
-  }
+      navigation.navigate("Home", { uid: user.uid });
+    } catch (error) {
+      console.log(error);
+      setError(true);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setMessageNotification(errorMessage);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.center}>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeUser}
+        onChangeText={onChangeEmail}
         // value={user}
-        placeholder="Usuario"
+        placeholder="Email"
       />
       <TextInput
         style={styles.input}
@@ -55,7 +60,7 @@ function Register({ navigation }) {
       />
       <TouchableOpacity
         title="Iniciar Sesion"
-        onPress={registerUser}
+        onPress={handleRegister}
         style={styles.button}
       >
         <Text style={styles.btnText}>Registarse</Text>
@@ -76,16 +81,14 @@ function Register({ navigation }) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 10,
     borderWidth: 1,
-    padding: 20,
+    padding: 10,
     borderRadius: 3,
     width: 400,
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 0,
-    backgroundColor: "#f0ebf7",
-    placeholderTextColor: "#6e706e",
+    backgroundColor: "#f0ebf7"
   },
   button: {
     marginTop: 10,

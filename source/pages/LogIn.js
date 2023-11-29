@@ -8,57 +8,48 @@ import {
   Button,
 } from "react-native";
 import axios from "axios";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 export default function LogIn({ navigation }) {
-  const [user, onChangeUser] = React.useState("");
+  const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
 
   const [error, setError] = useState(false);
   const [messageNotification, setMessageNotification] = useState('');
-
-  function loginUser() {
-    axios
-      .post(
-        "http://localhost:5000/login",
-        {
-          username: user,
-          password: password,
-        }
-      )
-      .then(function (response) {
-        setError(false);
-        setMessageNotification(response.data.message);
-        console.log(response);
-        navigation.navigate("Home", { username: user });
+    
+    const handleLogin = async () => {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        navigation.navigate("Home", { uid: user.uid });
       })
-      .catch(function (error) {
+      .catch((error) => {
         setError(true);
-        setMessageNotification(error.response.data.error);
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setMessageNotification(errorMessage);
       });
-    }
-
+    };
+  
     return (
       <SafeAreaView style={styles.center}>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeUser}
-          // value={user}
+          onChangeText={onChangeEmail}
           placeholder="Usuario"
-        />
+          />
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
-          // value={password}
-          placeholder="Contraseña"
           secureTextEntry={true}
+          placeholder="Contraseña"
         />
         <TouchableOpacity
           title="Iniciar Sesion"
-          onPress={loginUser}
+          onPress={handleLogin}
           style={styles.button}
         >
           <Text style={styles.btnText}>Iniciar Sesion</Text>
@@ -78,16 +69,14 @@ export default function LogIn({ navigation }) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 10,
     borderWidth: 1,
-    padding: 20,
+    padding: 10,
     borderRadius: 3,
     width: 400,
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 0,
-    backgroundColor: "#f0ebf7",
-    placeholderTextColor: "#6e706e",
+    backgroundColor: "#f0ebf7"
   },
   button: {
     marginTop: 10,
