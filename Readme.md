@@ -26,14 +26,13 @@
     <img src="https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Login de React Native</h3>
+  <h3 align="center">Pagina de productos con Login en React Native</h3>
 
   <p align="center">
-    Una aplicacion de React Native que simula un login.
+    Una aplicacion de React Native que simula un login y una pagina de productos.
     <br />
     <br />
     <br />
-    <a href="https://github.com/IAPA2309/api-inicio-de-sesion-nodejs.git">Ver API</a>
     ·
     <a href="https://github.com/IAPA2309/practica-rn-creando-un-login/issues">Reportar Bug</a>
   </p>
@@ -70,7 +69,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Sobre el proyecto
 
-Una aplicacion de React Native que simula un login, en el cual se puede iniciar sesion, registrarse y modificar el perfil del usuario.
+Una aplicacion de React Native que simula un login y una pagina de productos, en la cual se puede iniciar sesion, registrarse y modificar el perfil del usuario. Ademas de ver distintos productos y editarlos. Usa FireBase.
 
 <p align="right">(<a href="#readme-top">Volver arriba</a>)</p>
 
@@ -104,8 +103,6 @@ Instalar la ultima version de NPM.
   npm install -g expo-cli
   ```
 
-* Instalar y correr la [API](https://github.com/IAPA2309/api-inicio-de-sesion-nodejs.git) (La documentacion se encuntra en el README) con la base de datos.
-
 ### Instalacion
 
 
@@ -136,7 +133,7 @@ Instalar la ultima version de NPM.
 
 La aplicacion es simple, se encuentran campos de texto los cuales hay que completar para poder iniciar sesion, o en su defecto utilizar el boton de "No tengo cuenta" que te redirije a otra pantalla en la cual podas crear un usuario. 
 
-Si inicias sesion, te redirijira a una pantalla de bienvenida donde podras completar tu perfil con nombre y apellido.
+Si inicias sesion, te redirijira a una pantalla de bienvenida donde podras completar tu perfil con nombre y apellido. Ademas hay un boton que lo dirige a la pagina de productos los cuales va a poder ver y editar.
 
 <p align="right">(<a href="#readme-top">Volver arriba</a>)</p>
 
@@ -147,6 +144,8 @@ Si inicias sesion, te redirijira a una pantalla de bienvenida donde podras compl
 - [x] Registro
 - [x] Modificar perfil
 - [x] Completar perfil
+- [x] Agregar pagina de productos
+- [x] Editar los productos
 
 <p align="right">(<a href="#readme-top">Volver arriba</a>)</p>
 
