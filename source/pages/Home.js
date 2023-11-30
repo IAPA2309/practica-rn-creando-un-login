@@ -4,122 +4,126 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Image
 } from "react-native";
-import React, { Component, useEffect, useState } from 'react'
-import { useRoute } from "@react-navigation/native";
-import axios from "axios";
-import { getAuth } from "firebase/auth";
+import React, { useEffect, useState } from 'react'
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+import { useRoute } from "@react-navigation/native";
 
-export default function Home() {
-    const route = useRoute();
-    const uid = route.params?.uid;
 
-    const [editMode, setEditMode] = useState(false);
-    const [nombre, setNombre] = useState(null);
-    const [apellido, setApellido] = useState(null);
+export default function Home({ navigation }) {
+  const route = useRoute();
+  const uid = route.params?.uid;
 
-    const [editedNombre, setEditedNombre] = useState(nombre || "");
-    const [editedApellido, setEditedApellido] = useState(apellido || "");
+  const [editMode, setEditMode] = useState(false);
+  const [nombre, setNombre] = useState(null);
+  const [apellido, setApellido] = useState(null);
 
-    useEffect(() => {
-        getUserData();
-      }
-    );
+  const [editedNombre, setEditedNombre] = useState(nombre || "");
+  const [editedApellido, setEditedApellido] = useState(apellido || "");
 
-    const handleEditClick = () => {
-      setEditMode(true);
-    };
+  useEffect(() => {
+    getUserData();
+  });
 
-    const handleCompleteProfileClick = () => {
-      setEditMode(true); // para que el formulario de editar se pueda usar, mantener en true
-    };
+  const handleEditClick = () => {
+    setEditMode(true);
+  };
 
-    const handleSaveClick = async () => {
-      try{
-        const db = getFirestore();
-        
-        const docRef = doc(db, "usuarios", uid);
-  
-        await updateDoc(docRef, {
-          nombre: editedNombre,
-          apellido: editedApellido
-        });
+  const handleCompleteProfileClick = () => {
+    setEditMode(true); // para que el formulario de editar se pueda usar, mantener en true
+  };
 
-        setEditMode(false);
-
-      }catch(error){
-        console.log(error);
-      }
-    };
-
-    async function getUserData() {
-
+  const handleSaveClick = async () => {
+    try {
       const db = getFirestore();
 
       const docRef = doc(db, "usuarios", uid);
-      const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
+      await updateDoc(docRef, {
+        nombre: editedNombre,
+        apellido: editedApellido,
+      });
 
-        console.log("Document data:", docSnap.data());
-        setNombre(docSnap.data().nombre || null);
-        setApellido(docSnap.data().apellido || null);
-
-      } else {
-        console.log("No such document!");
-      }
-
+      setEditMode(false);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    return (
-      <View style={styles.center}>
-        <View>
-          {nombre || apellido ? (
-            <Text>Bienvenido, {nombre + " " + apellido}!</Text>
-          ) : (
-            <Text>Bienvenido!</Text>
-          )}
-          {editMode ? (
-            <View>
-              <TextInput
-                placeholder="Nombre"
-                value={editedNombre}
-                onChangeText={(text) => setEditedNombre(text)}
-                style={styles.input}
-              />
-              <TextInput
-                placeholder="Apellido"
-                value={editedApellido}
-                onChangeText={(text) => setEditedApellido(text)}
-                style={styles.input}
-              />
-              <TouchableOpacity onPress={handleSaveClick} style={styles.button}>
-                <Text style={styles.btnText}>Guardar</Text>
+  async function getUserData() {
+    const db = getFirestore();
+
+    const docRef = doc(db, "usuarios", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // console.log("Document data:", docSnap.data());
+      setNombre(docSnap.data().nombre || null);
+      setApellido(docSnap.data().apellido || null);
+    } else {
+      console.log("No such document!");
+    }
+  }
+
+  return (
+    <View style={styles.center}>
+      <Image
+        source={require("../../assets/Logo.png")}
+        style={{ width: 200, height: 150, borderRadius: 20 }}
+      />
+      <View>
+        {nombre || apellido ? (
+          <Text style={{ fontSize: 21 }}>
+            Bienvenido, {nombre + " " + apellido}!
+          </Text>
+        ) : (
+          <Text style={{ fontSize: 21 }}>Bienvenido!</Text>
+        )}
+        {editMode ? (
+          <View>
+            <TextInput
+              placeholder="Nombre"
+              value={editedNombre}
+              onChangeText={(text) => setEditedNombre(text)}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Apellido"
+              value={editedApellido}
+              onChangeText={(text) => setEditedApellido(text)}
+              style={styles.input}
+            />
+            <TouchableOpacity onPress={handleSaveClick} style={styles.button}>
+              <Text style={styles.btnText}>Guardar</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            {nombre && apellido ? (
+              <TouchableOpacity onPress={handleEditClick} style={styles.button}>
+                <Text style={styles.btnText}>Editar perfil</Text>
               </TouchableOpacity>
-            </View>
-          ) : (
-            <View>
-              {nombre && apellido ? (
-                <TouchableOpacity
-                  onPress={handleEditClick}
-                  style={styles.button}
-                >
-                  <Text style={styles.btnText}>Editar perfil</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={handleCompleteProfileClick}
-                  style={styles.button}
-                >
-                  <Text style={styles.btnText}>Completar perfil</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-        </View>
+            ) : (
+              <TouchableOpacity
+                onPress={handleCompleteProfileClick}
+                style={styles.button}
+              >
+                <Text style={styles.btnText}>Completar perfil</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        <TouchableOpacity
+          title="Ver productos"
+          onPress={() => navigation.navigate("ProductsHome")}
+          style={styles.button}
+        >
+          <Text style={styles.btnText}>Ver productos</Text>
+        </TouchableOpacity>
       </View>
-    );
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
